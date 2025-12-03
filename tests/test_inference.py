@@ -9,7 +9,6 @@ from src.inference_pytorch import infer_single
 
 torch = pytest.importorskip("torch")
 from models.monodepth2_pytorch import Monodepth2Model  # noqa: E402
-from src.visualization import save_depth_map  # noqa: E402
 
 
 def test_infer_single_outputs(tmp_path):

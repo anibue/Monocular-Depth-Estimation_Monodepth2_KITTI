@@ -24,6 +24,13 @@ try:
 except ImportError:  # pragma: no cover
     tf = None
 
+try:
+    import mindspore as ms
+    import mindspore.dataset as msds
+except ImportError:  # pragma: no cover
+    ms = None
+    msds = None
+
 
 def read_split_file(split_path: Path) -> Tuple[Path, ...]:
     lines = split_path.read_text().splitlines()
@@ -118,3 +125,35 @@ def create_tf_dataset(
     ds = ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
     return ds
 
+
+class KITTIDatasetMS:
+    """MindSpore 数据集生成器。"""
+
+    def __init__(self, split_file: str, img_height: int, img_width: int, augment: Optional[Dict] = None):
+        self.samples = read_split_file(Path(split_file))
+        self.img_height = img_height
+        self.img_width = img_width
+        self.augment = augment or {}
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx: int):
+        path = self.samples[idx]
+        img = Image.open(path).convert("RGB").resize((self.img_width, self.img_height))
+        if self.augment.get("flip") and np.random.rand() > 0.5:
+            img = img.transpose(Image.FLIP_LEFT_RIGHT)
+        arr = np.array(img).astype(np.float32) / 255.0
+        arr = np.transpose(arr, (2, 0, 1))  # C,H,W
+        return arr
+
+
+def create_mindspore_dataset(
+    split_file: str, img_height: int, img_width: int, batch_size: int, shuffle: bool = True, augment: Optional[Dict] = None
+):
+    if ms is None or msds is None:
+        raise ImportError("MindSpore is required for MindSpore dataset creation.")
+    generator = KITTIDatasetMS(split_file, img_height, img_width, augment)
+    ds = msds.GeneratorDataset(generator, column_names=["left"], shuffle=shuffle)
+    ds = ds.batch(batch_size, drop_remainder=True)
+    return ds

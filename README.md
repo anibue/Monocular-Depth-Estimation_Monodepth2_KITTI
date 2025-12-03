@@ -1,11 +1,11 @@
-# Monodepth2 on KITTI (PyTorch + TensorFlow)
+# Monodepth2 on KITTI (PyTorch + TensorFlow + MindSpore)
 
 Monocular depth estimation with a dual-backend Monodepth2 implementation targeting the KITTI dataset. This repo includes a PyTorch-first training/inference pipeline, a TensorFlow/Keras mirror, data preparation scripts, configs, Dockerfile, and tests suitable for open-sourcing.
 
 ## Environment
 
 - Primary dev: Windows 11 + VS Code; training typically on Linux (CUDA).
-- Conda environment: `environment.yml`
+- Conda environment: `environment.yml` (PyTorch 2.2.x, TensorFlow 2.12, MindSpore 2.2.10, Python 3.10).
 - Docker: CUDA-enabled base image (Ubuntu) in `Dockerfile`
 
 ## Quickstart
@@ -55,6 +55,12 @@ TensorFlow:
 python src/train_tensorflow.py --config config/config_tensorflow.yaml
 ```
 
+MindSpore:
+
+```bash
+python src/train_mindspore.py --config config/config_mindspore.yaml
+```
+
 Resume training: point `--config` to same file and set `logging.checkpoint_dir` to existing checkpoints.
 
 ### Inference
@@ -77,6 +83,15 @@ python src/inference_tensorflow.py --config config/config_tensorflow.yaml \
   --output outputs/tensorflow
 ```
 
+MindSpore:
+
+```bash
+python src/inference_mindspore.py --config config/config_mindspore.yaml \
+  --checkpoint checkpoints/mindspore/epoch_1.ckpt \
+  --input_image path/to/image.png \
+  --output outputs/mindspore
+```
+
 ### Visualization
 
 Depth PNGs are saved via `src/visualization.py` (grayscale/colormap). You can also import and call `save_depth_map` on NumPy arrays for custom pipelines.
@@ -91,11 +106,11 @@ Tests use synthetic data; no KITTI download needed.
 
 ## Project Structure
 
-- `config/` – YAML configs for PyTorch and TensorFlow
+- `config/` – YAML configs for PyTorch, TensorFlow, and MindSpore
 - `data/` – dataset folder (placeholder README inside)
-- `models/` – Monodepth2 implementations (`monodepth2_pytorch.py`, `monodepth2_tf.py`)
-- `src/` – training, inference, datasets, utils, visualization, data prep
-- `tests/` – pytest suites for datasets, models, and inference
+- `models/` – Monodepth2 implementations (`monodepth2_pytorch.py`, `monodepth2_tf.py`, `monodepth2_mindspore.py`)
+- `src/` – training, inference, datasets, utils, visualization, data prep (plus MindSpore entrypoints)
+- `tests/` – pytest suites for datasets, models, and inference (MindSpore tests skipped if not installed)
 - `docs/` – `monodepth2_kitti_technical_report.md`
 - `environment.yml` – conda env spec
 - `Dockerfile` – CUDA-enabled runtime image
@@ -106,4 +121,3 @@ Tests use synthetic data; no KITTI download needed.
 - Keep credentials and KITTI downloads out of version control.
 - Cite KITTI and Monodepth2 in papers/projects.
 - Contributions welcome via PRs; please run `pytest` before submitting.
-

@@ -1,0 +1,33 @@
+experiment_name: monodepth2_mindspore_baseline
+seed: 42
+
+data:
+  dataset_root: data/kitti
+  split_dir: data/kitti/splits
+  train_split: train_files.txt
+  val_split: val_files.txt
+  img_height: 192
+  img_width: 640
+  batch_size: 4
+  augment:
+    flip: true
+    color_jitter: false
+
+model:
+  encoder: resnet18
+  scales: [0, 1, 2, 3]
+  min_depth: 0.1
+  max_depth: 100.0
+
+optimization:
+  epochs: 20
+  learning_rate: 1.0e-4
+  weight_decay: 0.0
+  grad_clip_norm: 1.0
+
+logging:
+  log_interval: 50
+  checkpoint_dir: checkpoints/mindspore
+
+inference:
+  output_dir: outputs/mindspore

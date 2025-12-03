@@ -15,6 +15,7 @@ RUN python3 -m venv /opt/venv && . /opt/venv/bin/activate && pip install --upgra
     pip install --no-cache-dir wheel setuptools && \
     pip install --no-cache-dir torch torchvision --extra-index-url https://download.pytorch.org/whl/cu121 && \
     pip install --no-cache-dir tensorflow==2.12 && \
+    pip install --no-cache-dir mindspore==2.2.10 && \
     pip install --no-cache-dir numpy scipy matplotlib opencv-python Pillow pyyaml tqdm rich pytest pytest-mock einops albumentations tensorboard
 
 ENV PATH="/opt/venv/bin:${PATH}"

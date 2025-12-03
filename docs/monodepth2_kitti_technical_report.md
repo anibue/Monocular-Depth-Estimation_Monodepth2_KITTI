@@ -74,6 +74,14 @@ Why Monodepth2 vs simpler baselines:
 - Losses: simplified photometric + smoothness.
 - Differences: TF version approximates the PyTorch architecture; full auto-masking and per-scale min reprojection are TODOs (see code comments).
 
+### MindSpore Implementation
+
+- Encoder: lightweight Conv/BN/ReLU stack approximating ResNet-18 capacity.
+- Decoder: ELU conv blocks + nearest upsampling; produces multi-scale disparities.
+- PoseNet: conv head over encoded features, outputs 6-DoF pose (scaled).
+- Losses: SSIM + L1 photometric (simplified without explicit warping), edge-aware smoothness.
+- Differences: focuses on parity of training/inference pipeline; extend with full warping/auto-masking as future work.
+
 ## Optimization Strategy
 
 - Optimizer: Adam (lr default 1e-4, weight decay optional).
@@ -108,4 +116,3 @@ Evaluation procedure: run inference on validation/test, compare predicted depth 
 - Static scenes and textureless regions remain challenging.
 - Simplified warping and missing auto-masking in TF version; PyTorch warping is stereo-style approximation.
 - Future work: full temporal photometric warping with camera intrinsics, auto-masking, min reprojection, depth hint supervision, better augmentation, transformer/convnext encoders, and distillation across backends.
-
