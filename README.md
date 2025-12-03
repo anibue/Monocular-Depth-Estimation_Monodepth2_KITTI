@@ -1,6 +1,8 @@
 # Monodepth2 on KITTI (PyTorch + TensorFlow + MindSpore)
 
-Monocular depth estimation with a dual-backend Monodepth2 implementation targeting the KITTI dataset. This repo includes a PyTorch-first training/inference pipeline, a TensorFlow/Keras mirror, data preparation scripts, configs, Dockerfile, and tests suitable for open-sourcing.
+[中文说明](README_ZN.md) | English
+
+Monocular depth estimation with a multi-backend Monodepth2 implementation targeting the KITTI dataset. This repo includes a PyTorch-first training/inference pipeline, a TensorFlow/Keras mirror, a MindSpore mirror, data preparation scripts, configs, Dockerfile, and tests suitable for open-sourcing.
 
 ## Environment
 
