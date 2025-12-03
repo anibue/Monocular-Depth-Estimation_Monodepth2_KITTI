@@ -1,0 +1,25 @@
+name: monodepth2-kitti
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pytorch=2.2.2
+  - torchvision=0.17.2
+  - cudatoolkit=11.8
+  - tensorflow=2.12
+  - numpy
+  - scipy
+  - matplotlib
+  - opencv
+  - pillow
+  - pyyaml
+  - tqdm
+  - rich
+  - pytest
+  - pytest-mock
+  - pip
+  - pip:
+      - einops
+      - albumentations
+      - tensorboard
